@@ -1,0 +1,535 @@
+\documentclass{article}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+
+% Header
+\fancyhead[L]{Autonomous Inventory Tracking Robot}
+\fancyhead[R]{Team 7}
+
+% Footer
+\fancyfoot[C]{\thepage}
+
+% Lines
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Prevent fancyhdr headheight warning
+\setlength{\headheight}{14.5pt}
+
+
+
+%\title{Development Plan\\\progname}
+%
+%\author{\authname}
+%
+%\date{}
+%
+%\input{../Comments}
+%\input{../Common}
+
+\begin{document}
+	
+\begin{titlepage}
+	\centering
+	
+	{\fontsize{30}{34}\selectfont \bfseries Project Goals and Development Plan\par}
+	
+	\vspace{0.6cm}
+	
+	{\fontsize{20}{24}\selectfont Autonomous Inventory Tracking Robot\par}
+	
+	\vspace{1cm}
+	
+	\rule{0.75\textwidth}{0.5pt}
+	
+	\vspace{1.4cm}
+	
+	{\large \bfseries Team 7\par}
+	
+	\vspace{0.8cm}
+	
+	\begin{tabular}{lll}
+		Dhilan Teeluckdharry & teeluckn & 400434738 \\
+		Johnson Ji & jih21 & 400499564 \\
+		Zhichen Ji & jic15 & 400392466 \\
+		Hongliang Qi & qih25 & 400493278 \\
+		Owen Grootenboer & grooteno & 400400374
+	\end{tabular}
+	
+	\vfill
+	
+	\begin{tabular}{rl}
+		\textbf{Revision:} & 1.0 \\
+		\textbf{Date:} & \today
+	\end{tabular}
+	
+	\vspace{1cm}
+	
+\end{titlepage}
+
+%\maketitle
+
+\newpage{}
+
+
+\begin{table}[hp]
+\caption{Revision History} \label{TblRevisionHistory}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
+\midrule
+2026-10-02 & Dhilan, Johnson, Zhichen, Hongliang, Owen & Initial Write-up\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\tableofcontents
+
+\newpage{}
+
+\section{Project Description}
+
+The project will deliver an autonomous inventory management robot for warehouse environments. The robot will visit given inspection locations, stop at each location, and capture images of the corresponding shelves of products. The robot will gather information from its surroundings to operate safely and efficiently in its environment. Each captured image will be associated with the inspection location and time, so that the operator can check the collected information. 
+
+\section{Project Goals}
+
+Level 1 Goals:
+
+\begin{itemize}
+	\item \textit{Autonomous path planning \& navigation}: Given a pre-mapped commercial or warehouse environment and a set of inspection locations, our robot will autonomously navigate to each location with minimal human intervention.
+	
+	\item \textit{Safe navigation}: The robot will stop moving if an obstruction or moving pedestrian is identified in front of its path, making it more safe and reliable to operate in busy or workplace environments.
+	
+	\item \textit{Flexible imaging for estimates}: The robot can capture images of the requested item or shelf at multiple angles to give the operator the ability to get accurate estimates.
+	
+	\item \textit{Operator Interface}: The project will include the delivery of an interface so that the Operator can efficiently review the captured images associated with each location from the robot.
+	
+\end{itemize}
+Level 2 Goals:
+\begin{itemize}
+	\item \textit{Autonomous Inventory Tracking}: The system will identify and count visible, non-depth-stacked products from captured images, display estimated inventory levels on the operator interface, and alert the inventory manager when stock levels fall below a predefined threshold.
+	
+	
+	\item \textit{Adaptive navigation}: If an obstruction is discovered in the path the robot attempts to take to a set location, it can re-route to its set location, avoiding the obstruction.
+	
+\end{itemize}
+
+
+%\section{Copyright License}
+%
+%Our team will be adopting the MIT
+%\href{https://github.com/Nirmal-code/SixSense/blob/main/LICENSE}{License}.
+
+
+%\section{Team Communication Plan} \label{sec:TeamCommunicationPlan}
+%
+%The team will use the following communication methods for each of the scenarios
+%listed:
+%\begin{itemize}
+%  \item \textbf{General team communication:} Microsoft Teams Group Chat. Every
+%  team member is expected to send general queries and updates to the group chat.
+%  Try to avoid sending individual messages to team members regarding the project
+%  unless necessary.
+%  \item \textbf{Urgent team communication:} Microsoft Teams Group Chat and
+%  individual text messages. If a message is urgent, it should be marked as
+%  urgent in the group chat. If no response is received, individual text messages
+%  (SMS) can be sent to team members.
+%  \item \textbf{Communication with the instructor, TA, and supervisor:}
+%  University email with Outlook. Every team member is expected to be cc'd on
+%  emails sent to the instructor, TA, or supervisor.
+%  \item \textbf{Sharing Documents:} Github repository and Microsoft OneDrive.
+%  All project-critical documents need to be stored in the Github Repository.
+%  Large files that are not project-critical (e.g datasets, SDKs, etc.) can be
+%  stored in the university hosted OneDrive.
+%  \item \textbf{Development communication:} Github Issues and Pull Requests.
+%  All development-related communication that needs to be tracked for
+%  traceability should be done through Github Issues and Pull Requests. This
+%  ensures that critical communication and decisions are documented and can be
+%  referenced later if needed.
+%  \item \textbf{Meeting Scheduling:} If a meeting needs to be scheduled outside
+%  of regular team meetings and involves multiple team members, we will be using
+%  the Outlook Calendar to find a suitable time for everyone. It is expected that
+%  all team members will export their calendars to Outlook to reflect accurate
+%  availability. For one-on-one meetings, direct communication through MS Teams
+%  is encouraged. If a meeting needs to be scheduled with the instructor, TA, or
+%  supervisor, the team will use email to coordinate a suitable time. 
+%\end{itemize}
+
+\section{Planned Group Structure}\label{sec:TeamMemberRoles}
+
+%From an admin perspective, each team member will have unique responsibilities
+%they are expected to carry out. These responsibilities are defined under 
+%distinct roles each member has been assigned to. A breakdown of the roles, 
+%responsibilities, qualifications and assignee has been provided below. 
+
+The planned group structure will follow the general roles and responsibilities listed below.
+
+
+\begin{itemize}
+  \item Team Coordinator (Johnson Ji) \label{role:team_coordinator}
+	    \begin{itemize}
+	      \item \textit{Role Responsibilities:}
+	        \begin{itemize}
+	          \item Manage weekly meeting agendas and coordinate meetings with the project supervisor, TAs, and professors
+	        \end{itemize}
+	         
+	      \item \textit{General Technical Role:}
+	       \begin{itemize}
+	         	\item Design the system architecture. 
+	         	\item Develop navigation algorithms.
+	         	\item Coordinate with other team members to integrate the hardware and software systems.
+	      \end{itemize}
+	          
+	      \item \textit{Relevant Capabilities and Past Experience:}
+	        \begin{itemize}
+	        	\item Previous research and co-op experience in robotics, including a publication on social navigation for mobile robots.
+	        \end{itemize}
+	    \end{itemize}
+    
+    
+    \item Simulation and Testing Expert (Dhilan Teeluckdharry) \label{role:sim_expert}
+   		\begin{itemize}
+    	\item \textit{Role Responsibilities:}
+    	\begin{itemize}
+    		\item Design workflows for prototype and simulation testing.
+    		\item Plan real-world deployment scenarios and prepare demonstration environments.
+    		\item Identify modes of failure and make amendments to system. 
+    	\end{itemize}
+    	
+    	\item \textit{General Technical Role:}
+    	\begin{itemize}
+    		\item Assist with design and implementation of software architecture for robot autonomy 
+    		\item Design of simulation environment to prototype and validate approach. 
+    	\end{itemize}
+    	
+    	\item \textit{Relevant Capabilities and Past Experience:}
+    	\begin{itemize}
+    		\item 16 months of cumulative research experience in robotics, focusing on, safe local navigation, evolutionary computing and optimal sensor placement. 
+    		\item 4 months of industry experience at stealth startup working on deployment of computer vision system for anomaly detection in agricultural crops. 
+    	\end{itemize}
+    \end{itemize}
+    
+    \item Embedded systems \& Verification Expert  (Hongliang Qi) \label{role:embedded_expert}
+    \begin{itemize}
+    	\item \textit{Role Responsibilities:}
+    	\begin{itemize}
+    		\item Ensure seamless integration of hardware, software, and electrical modules.
+    		\item Ensure all team members follow a coordinated system integration plan. 
+    	\end{itemize}
+    	
+    	\item \textit{General Technical Role:}
+    	\begin{itemize}
+    		\item Assist with reviewing source code, technical documentation, and software-related project materials to ensure consistency, completeness, and quality.
+    	\end{itemize}
+    	
+    	\item \textit{Relevant Capabilities and Past Experience:}
+    	\begin{itemize}
+    		\item Previous experience in developing a line-following robot, including sensor integration, PWM motor control, embedded programming, and hardware-software debugging. 
+    	\end{itemize}	
+    	
+    	
+    	
+    \end{itemize}
+    
+    \item Quality Management \& Review Lead  (Owen Grootenboer) \label{role:quality_mangement}
+    \begin{itemize}
+    	\item \textit{Role Responsibilities:}
+    	\begin{itemize}
+    		\item Ensure high quality in all produced deliverables and following all outlined requirements.
+    		\item  Ensure the budget is kept on track during project lifetime. 
+    	\end{itemize}
+    	
+    	\item \textit{General Technical Role:}
+    	\begin{itemize}
+    		\item Assist in design and assembly of drive-train for the autonomous robot. Lead for producing and managing project requirements and ensure their consideration throughout the project lifetime. 
+    		\item Assist in development of operator dashboard and related testing.
+    	\end{itemize}
+    	
+    	\item \textit{Relevant Capabilities and Past Experience:}
+    	\begin{itemize}
+    		\item Previous experience assembling drive-train chassis. 
+    		\item 16 months of co-op experience in requirement management including some quality control of requirements. 
+    		\item Skilled in technical and professional writing and working in team environments for success.
+    	\end{itemize}	
+    	
+    	
+    	
+    \end{itemize}
+    
+     \item Project Planner \& Documentation Lead  (Zhichen Ji) \label{role:project_planner}
+    \begin{itemize}
+    	\item \textit{Role Responsibilities:}
+    	\begin{itemize}
+    		\item Manage project schedule and tracking milestone deadlines for all team submissions. 
+    		\item Keep track of component purchasing and ensure documentation formats are followed during project lifetime.
+    	\end{itemize}
+    	
+    	\item \textit{General Technical Role:}
+    	\begin{itemize}
+       		\item Assists with chassis assembly, drivetrain alignment, and LiDAR/camera mounting. 
+    		\item Sets up the mock warehouse track, conducts physical drive tests, and logs hardware telemetry and sensor errors. 
+    		\item Tracks mechanical/electrical faults and manages Engineering Change Notices.
+    	\end{itemize}
+    	
+    	\item \textit{Relevant Capabilities and Past Experience:}
+    	\begin{itemize}
+    		\item Previous experience with physical assembly and 3D CAD modeling.  
+    		\item Nearly two years of co-op experience in automation engineering including CAD design in SolidWorks, Creo, and physical part inspection. 
+    		\item Skilled in technical documentation and working in engineering team environments for success.
+    	\end{itemize}	
+    	
+    	
+    	
+    \end{itemize}
+\end{itemize}
+
+
+
+\section{Version Control}
+A shared GitHub repository will be used to store all software, firmware, documentation, configuration files, electrical diagrams, CAD files, and verification records.
+
+
+\subsection{Repository and branching Strategy}
+
+\begin{itemize}
+	\item The main branch will remain protected.
+	\item Development will be performed on separate feature branches.
+	\item Each pull request must be reviewed by at least one other member of the relevant subteam before merging.
+	\item Major verified milestones will be released and tagged with version numbers, such as v0.1-navigation-working.
+\end{itemize}
+
+\subsection{Repository Organization}
+The project will be organized into three main areas:
+\begin{itemize}
+	\item Software
+	\item Hardware
+	\item Documentation
+\end{itemize}
+Software will include both firmware and autonomy-related code. Simulation environments, dependencies, and test cases will be documented, while temporary and generated files will be excluded using \textit{.gitignore}.
+
+
+\subsection{Hardware and Documentation Records}
+Hardware iterations, including electrical and mechanical designs, will be recorded with verification reports and supporting test videos where appropriate.
+Documentation will be maintained primarily in Markdown and exported to PDF for formal submission.
+
+\subsection{Traceability}
+All commits will include clear descriptions and identifiable authors to maintain traceability throughout development.
+
+\section{Change and Issue Management}
+GitHub Issues will be used to track bugs, change requests, and improvement tasks.
+Each change will include 
+\begin{itemize}
+	\item Description
+	\item Affected subsystem(s)
+	\item Change Classification
+	\item Assigned owner
+	\item Status
+	\item Acceptance criteria
+\end{itemize}
+\subsection{Change Classification}
+Changes will be classified as:
+\begin{itemize}
+	\item \textbf{Minor}: documentation updates, parameter tuning, or small bug fixes.
+	\item \textbf{Major}: changes to algorithms, subsystem interfaces, hardware components, or system behavior.
+	\item \textbf{Critical}: changes known to affect safety, core system architecture, or major project requirements.	
+\end{itemize}
+
+\subsection{Change Review and Disposition}
+Each issue or change request will be reviewed by the relevant subteam and marked as:
+\begin{itemize}
+	\item Accepted
+	\item Rejected
+	\item Deferred
+	\item Completed
+\end{itemize}
+Accepted changes will be implemented on a feature branch, tested using the appropriate simulation, hardware, or integration procedure, and reviewed through a pull request before being merged into main.
+
+\subsection{Verification and Closure}
+A change will only be closed after the required verification has been completed successfully. Related changes, commits, pull requests, and test results will be linked where possible to maintain traceability.
+
+\section{Overall Process Workflow}
+The development process follows an iterative development and integration process, allowing for flexibility in the timeline for specific steps, and focusing on major stages of development. The main development process follows the sequential five-stage V-model and stage-gate engineering workflow: 
+\begin{itemize}
+	\item Stage 1: Requirements Engineering \& Interface Architecture Freeze (Weeks 1–3) 
+	\item Stage 2: Subsystem Detailed Design \& Virtual Simulation (Weeks 4–8) 
+	\item Stage 3: Subsystem Fabrication, Prototyping \& Bench Unit Testing (Weeks 9–14) 
+	\item Stage 4: Full-System Hardware-Software Integration \& Verification (Weeks 15–20) 
+	\item Stage 5: Field Acceptance Testing \& Demonstration (Weeks 21–24)
+\end{itemize}
+
+\subsection{Stage 1: Requirements Engineering \& Interface Architecture Freeze}
+\begin{itemize}
+	\item \textbf{Background Research and Problem Scoping}
+	\begin{itemize}
+		\item Summarize the problem and investigate existing inventory inspection solutions.
+		\item Compare their limitations in cost, complexity, and reliance on computer vision.
+		\item Define the prototype scope and distinguish core functions from stretch goals.
+		\item Specify operating conditions such as aisle width, floor conditions, lighting, shelf arrangement, and obstacle types.
+		\item Record research findings and references in the project documentation.
+	\end{itemize}
+	
+	\item \textbf{Requirements}
+	\begin{itemize}
+		\item Define the robot's functional and performance requirements.
+		\item Establish measurable requirements and test procedures for navigation success, waypoint accuracy, obstacle detection, image quality, and mission-completion time.
+		\item Complete a Fault Tree Analysis and identify key hazard methods from the Cut Set to assess preliminary safety risks and develop safety requirements.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Stage 2: Subsystem Detailed Design \& Virtual Simulation }
+\begin{itemize}
+	\item \textbf{Preliminary Ideas \& Concept Selection}
+	\begin{itemize}
+		\item Generate candidate designs and preliminary mechanical, electrical, and software diagrams.
+		\item Review candidate designs to ensure they can account for all project requirements.
+		\item Record brainstorming results and compare concepts using cost, feasibility, safety, and development effort.
+		\item Review the proposed concepts with the supervisor and document the selected concept and reasons for selection.
+	\end{itemize}
+	
+	\item \textbf{System Architecture Design}
+	\begin{itemize}
+		\item Define the high-level system architecture by dividing the system into mechanical, electrical, and software modules.
+		\item Determine the mathematical and theoretical foundations of the proposed algorithms and designs, and evaluate their feasibility, deployability, portability, and suitability for the project requirements.
+		\item Define the function, inputs, outputs, interfaces, and acceptance criteria for each module.
+		\item Establish testing standards for each module, including clear pass/fail criteria before system integration.
+		\item Identify and evaluate the required sensors, actuators, single-board computer, software tools, development environment, and supporting technologies needed for implementation and deployment.
+		\item Identify dependencies between modules and determine the required development and integration sequence.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Stage 3: Subsystem Fabrication, Prototyping \& Bench Unit Testing}
+\begin{itemize}
+	\item \textbf{Develop Simulation Testbed and Begin CAD Design}
+	\begin{itemize}
+		\item Construct a representative warehouse world in Gazebo Fortress (ROS 2 Humble) with standardized racking, dynamic obstacles, and inspection waypoints.
+		\item Start with a compatible temporary robot model in simulation, such as TurtleBot, equipped with simulated onboard sensors.
+		\item Use launch and configuration files to manage the environment, robot model, and test settings.
+		\item Create repeatable scenarios and reset procedures for navigation, obstacle-response, and image-capture tests.
+		\item Store world files, robot models, configuration files, and test instructions in GitHub.
+		\item Work on chassis CAD assemblies in Autodesk 2026, conduct structural stress analysis, and fabricate physical sensor brackets and drivetrain mounts for prototype bench-testing.
+		\item Integrate the final robot model when its geometry and sensor arrangement are available.
+	\end{itemize}
+	
+	\item \textbf{Development of Autonomy Stack}
+	\begin{itemize}
+		\item Create or load the environment map and configure robot coordinate transforms.
+		\item Integrate the required sensor topics, such as LiDAR, IMU, and camera data.
+		\item Configure Nav2 for global path planning, local navigation, and obstacle response.
+		\item Develop a mission-management node to load inspection poses, send navigation goals, monitor arrival, request images after stopping, and continue to the next location.
+		\item Capture images from the camera topic and save them as PNG files with inspection-location and timestamp metadata.
+		\item Test navigation and image capture in simulation, recording failures and relevant performance data.
+		\item Store source code, launch files, maps, parameters, and test scenarios in GitHub.
+	\end{itemize}
+	
+	\item \textbf{Dashboard Development}
+	\begin{itemize}
+		\item Build a web interface for reviewing images by inspection location and time.
+		\item Implement the connection between the robot's image collection node and the dashboard.
+		\item Test image transfer, metadata association, and display using simulated data before physical deployment.
+		\item Document dashboard dependencies and startup instructions, and store the source code and configuration in GitHub.
+	\end{itemize}
+\end{itemize}
+
+
+\subsection{Stage 4: Full-System Hardware-Software Integration \& Verification}
+\begin{itemize}
+	\item \textbf{Final Robot Design}
+	\begin{itemize}
+		\item Refine the selected concept using simulation results and component constraints.
+		\item Finalize component specifications and the bill of materials.
+		\item Define robot dimensions such as mass, payload capacity, wheel spacing, sensor positions, and camera arrangement.
+		\item Complete the CAD model and update the simulation model to represent the physical robot.
+		\item Review mechanical, electrical, and software interfaces before procurement and fabrication.
+	\end{itemize}
+	
+	\item \textbf{Development of Mechanical Design}
+	\begin{itemize}
+		\item Design or select the differential-drive chassis and mounting structures for computing hardware, sensors, motor drivers, battery, and safety devices.
+		\item Ensure unobstructed sensor visibility and a camera position suitable for the test shelves and required viewing angles.
+		\item Check stability, component clearance, and access for wiring and maintenance.
+		\item Produce manufacturing drawings and assembly instructions, then manufacture or order the required parts.
+		\item Store editable CAD files, drawings, and design revisions in GitHub.
+	\end{itemize}
+	
+	\item \textbf{Development of Electrical Design}
+	\begin{itemize}
+		\item Determine component voltage and current requirements and prepare a system power budget.
+		\item Select the battery, voltage regulators, and motor drivers using operating and stall-current requirements.
+		\item Produce schematics, wiring diagrams, connector specifications, and cable labels.
+		\item Design motor and logic power distribution with appropriate fuses, switches, connectors, and reverse-polarity protection.
+		\item Implement emergency-stop circuitry and battery monitoring.
+		\item Consider motor-generated electrical noise and its effect on sensors, computing hardware, and communication.
+		\item Develop embedded firmware for motor control, encoder feedback, communication with the onboard computer, and a communication watchdog.
+		\item Store electrical designs, firmware, build instructions, and configuration files in GitHub.
+	\end{itemize}
+	
+	\item \textbf{Assembly of Robot}
+	\begin{itemize}
+		\item Assemble the chassis and drivetrain, then install computing hardware, sensors, camera, battery, motor drivers, and safety devices.
+		\item Inspect fasteners and wiring, and test power rails before connecting computing hardware.
+		\item Test motors, encoders, sensor operation, camera capture, and controller communication individually.
+		\item Confirm that the emergency stop and communication watchdog disable motor operation.
+		\item Calibrate the required subsystems and perform controlled low-speed driving tests.
+		\item Record assembly changes, calibration settings, and subsystem test results.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Stage 5: Field Acceptance Testing \& Demonstration}
+\begin{itemize}
+	\item \textbf{Real-World Deployment and Testing}
+	\begin{itemize}
+		\item Deploy the autonomy stack on the onboard computer and connect the physical sensors and controller through the defined interfaces.
+		\item Update robot dimensions, coordinate transforms, sensor settings, and navigation parameters for the physical platform.
+		\item Create a representative warehouse demonstration environment with shelves, boxes, inspection locations, and obstacles.
+		\item Test individual waypoint navigation and the complete navigation--stop--capture--display sequence.
+		\item Test obstacle stopping, emergency-stop operation, and communication-loss behaviour.
+		\item Test return-to-home operation if included in the agreed scope.
+		\item Have an external user test the operator interface for feasibility and user experience.
+		\item Evaluate rerouting and automated inventory estimation separately as stretch functions.
+		\item Repeat inspection missions and record mission success, waypoint-arrival success, image-capture success, mission time, positioning error, and collisions or safety interventions.
+		\item Compare results with the agreed acceptance criteria and document failures, limitations, and improvements.
+	\end{itemize}
+\end{itemize}
+
+
+
+
+
+\section{Standards}
+
+
+\subsection{Software and Tools}
+\begin{itemize}
+	\item Gazebo is an open-source used for testing and modelling robots in a 3D simulation environment. Paired with ROS 2, It is an industry standard in robotics.
+	\item Our workflow is based on the V-model, which is commonly used in industry as a project management style.
+\end{itemize}
+
+\subsection{Coding Standards}\label{sec:coding_standards}
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{|l|X|X|}
+\hline
+\textbf{Coding language} & \textbf{Coding Standard} \\ \hline
+C++ & \href{https://google.github.io/styleguide/cppguide.html}{Google C++} \\
+\hline
+Python & \href{https://peps.python.org/pep-0008/}{PEP8} \\ \hline
+\end{tabularx}
+\caption{Team adopted coding standards.}
+\end{table}
+
+\newpage{}
+
+\end{document}
