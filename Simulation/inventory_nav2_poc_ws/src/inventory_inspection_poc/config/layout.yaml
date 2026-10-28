@@ -1,0 +1,23 @@
+# Single source of truth for the world, map, spawn pose and mission poses.
+warehouse:
+  size: 15.0
+  resolution: 0.05
+  wall_thickness: 0.20
+  wall_height: 1.50
+  shelf_height: 1.20
+robot:
+  length: 0.50
+  width: 0.50
+  height: 0.089
+  mass: 1.0
+  wheel_separation: 0.47
+  footprint_padding: 0.025
+shelves:
+  - {name: shelf_A, x: -1.5, y: 3.0, size_x: 5.0, size_y: 1.0}
+  - {name: shelf_B, x: -1.5, y: -3.0, size_x: 5.0, size_y: 1.0}
+  - {name: shelf_C, x: 4.0, y: 0.0, size_x: 1.0, size_y: 5.0}
+home: {name: Home, x: -5.5, y: 0.0, yaw: 0.0}
+inspection_waypoints:
+  - {name: A, x: -1.5, y: 1.5, yaw: 1.5707963267948966}
+  - {name: B, x: -1.5, y: -1.5, yaw: -1.5707963267948966}
+  - {name: C, x: 5.5, y: 0.0, yaw: 3.141592653589793}
