@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 # Run from the workspace after dependencies are installed. No sudo and no .bashrc edits.
 set -e
+# VS Code's Snap terminal can inject GTK/GIO modules linked against its older
+# glibc. Let system ROS/Gazebo applications discover system modules instead.
+for task_module_path in GTK_PATH GIO_MODULE_DIR; do
+  if [[ "${!task_module_path:-}" == *"/snap/"* ]]; then
+    unset "$task_module_path"
+    printf 'Ignoring Snap-injected %s for ROS/Gazebo.\n' "$task_module_path"
+  fi
+done
 task_distro="${ROS_DISTRO:-lyrical}"
 case "$task_distro" in
   jazzy|lyrical) ;;

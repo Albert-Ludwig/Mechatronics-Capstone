@@ -1,0 +1,4 @@
+RViz startup failure reproduced on 2026-10-28 (America/Toronto).
+Loader diagnostic excerpt from rviz2 --help in a VS Code Snap terminal:
+      9142:	 search path=/snap/code/271/usr/lib/x86_64-linux-gnu/gtk-3.0/modules/../../glibc-hwcaps/x86-64-v3:/snap/code/271/usr/lib/x86_64-linux-gnu/gtk-3.0/modules/../../glibc-hwcaps/x86-64-v2:/snap/code/271/usr/lib/x86_64-linux-gnu/gtk-3.0/modules/../..:/snap/core20/current/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v3:/snap/core20/current/lib/x86_64-linux-gnu/glibc-hwcaps/x86-64-v2:/snap/core20/current/lib/x86_64-linux-gnu		(RPATH from file /snap/code/271/usr/lib/x86_64-linux-gnu/gtk-3.0/modules/libcanberra-gtk-module.so)
+/opt/ros/lyrical/lib/rviz2/rviz2: symbol lookup error: /snap/core20/current/lib/x86_64-linux-gnu/libpthread.so.0: undefined symbol: __libc_pthread_init, version GLIBC_PRIVATE

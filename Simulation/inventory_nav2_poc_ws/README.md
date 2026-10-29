@@ -190,6 +190,20 @@ The convenience launcher builds, sources, checks and launches the same scene:
 ./run_poc.sh pedestrian:=true
 ```
 
+The launcher limits package discovery to this workspace's `src` directory so a
+nested repository copy cannot cause duplicate ROS package names. In VS Code
+Snap terminals it also ignores Snap-derived `GTK_PATH` and `GIO_MODULE_DIR`
+values for its child processes. Those module paths can load an incompatible
+Snap `libpthread` into system RViz and cause a `GLIBC_PRIVATE` symbol error.
+The official RViz launch shuts down the whole scene when RViz exits, so that
+initial library failure can produce secondary ROS shutdown crash reports.
+Non-Snap module paths are preserved, and the parent terminal is unaffected.
+The [original loader error](docs/runtime/snap-rviz-library-failure.log) was
+reproduced directly. A full desktop run with both problematic Snap paths
+explicitly injected then passed after the fix: 74.252 s of mission simulation
+time, zero detected contacts, and approach protection enabled. See the
+[regression evidence](docs/runtime/nav2-snap-startup-regression.json).
+
 Set `run_mission:=false` for manual goals, or
 `headless:=true use_rviz:=false` to hide both interfaces. Headless operation still
 requires a working rendering environment for GPU lidar. Exit the complete scene
