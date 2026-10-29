@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(inventory_pedestrian_visual)
+# Give IDEs the same versioned Gazebo include paths and definitions as the build.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(ament_cmake REQUIRED)
 find_package(gz_sim_vendor REQUIRED)
 find_package(gz_plugin_vendor REQUIRED)

@@ -323,6 +323,14 @@ pedestrians, and do not establish a general collision-free guarantee.
 
 ## Source and evidence map
 
+For C++ IntelliSense, the visual plugin's CMake build exports
+`build/inventory_pedestrian_visual/compile_commands.json`. Set `compileCommands`
+in your VS Code C/C++ configuration to
+`${workspaceFolder}/build/inventory_pedestrian_visual/compile_commands.json`.
+This supplies the versioned Gazebo vendor include paths and definitions used by
+the actual compiler; `/opt/ros/lyrical/include` alone does not contain those
+headers. Build the package once before opening its C++ source.
+
 | File | Purpose |
 | --- | --- |
 | [layout.yaml](src/inventory_inspection_poc/config/layout.yaml) | World, robot, pedestrian and mission settings |
