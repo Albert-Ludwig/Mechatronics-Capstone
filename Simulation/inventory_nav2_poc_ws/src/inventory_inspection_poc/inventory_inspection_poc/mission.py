@@ -1,7 +1,7 @@
 """Bounded startup -> FollowWaypoints(A,B,C) -> NavigateToPose(Home).
 
-Nav2 WaitAtWaypoint performs each five-second inspection pause. This process
-never writes velocity commands and does not compete with the navigation stack.
+Nav2 WaitAtWaypoint performs each five-second inspection pause. Motion is owned
+by Nav2; a detected contact cancels the mission and publishes an emergency zero.
 """
 import csv
 from datetime import datetime, timezone
@@ -13,7 +13,7 @@ import subprocess
 import time
 
 from action_msgs.msg import GoalStatus
-from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
+from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, Twist, TwistStamped
 from lifecycle_msgs.srv import GetState
 from nav2_msgs.action import FollowWaypoints, NavigateToPose
 from nav_msgs.msg import Odometry
@@ -28,7 +28,8 @@ from tf2_ros import Buffer, TransformException, TransformListener
 
 from .acceptance import check_action_result, DwellTracker
 from .configuration import load_layout
-from .geometry import angle_error, obstacles
+from .geometry import angle_error
+from .pedestrian import contact_topics
 
 
 class InspectionMission(Node):
@@ -38,6 +39,15 @@ class InspectionMission(Node):
         self.declare_parameter('results_dir', str(Path.home()/'inventory_poc_results'))
         self.declare_parameter('startup_timeout', 240.0)
         self.declare_parameter('mission_timeout', 900.0)
+        self.declare_parameter('pedestrian_enabled', False)
+        self.declare_parameter('extra_protection', True)
+        self.extra_protection = self.get_parameter('extra_protection').value
+        self.pedestrian_enabled = self.get_parameter('pedestrian_enabled').value
+        self.pedestrian_last_ready = None
+        self.declare_parameter('enable_stamped_cmd_vel', True)
+        self.stamped_velocity = self.get_parameter('enable_stamped_cmd_vel').value
+        self.velocity_type = TwistStamped if self.stamped_velocity else Twist
+        self.stop_pub = self.create_publisher(self.velocity_type, '/cmd_vel', 10)
         self.layout = load_layout(self.get_parameter('layout_file').value)
         self.home = self.layout['home']
         self.targets = self.layout['inspection_waypoints']
@@ -74,8 +84,11 @@ class InspectionMission(Node):
         self.create_subscription(PoseWithCovarianceStamped, '/amcl_pose',
                                  self.amcl_callback, QoSProfile(
                                      depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL))
-        for box in obstacles(self.layout):
-            topic = '/inspection_contacts/' + box['name']
+        if self.pedestrian_enabled:
+            from std_msgs.msg import Bool
+            self.create_subscription(Bool, '/inspection/pedestrian_ready',
+                                     self.pedestrian_ready_callback, 10)
+        for topic in contact_topics(self.layout, self.pedestrian_enabled):
             self.create_subscription(Contacts, topic, partial(self.contact_callback, topic),
                                      qos_profile_sensor_data)
         self.trajectory_file = (self.result_dir/'trajectory.csv').open('w', newline='')
@@ -110,6 +123,21 @@ class InspectionMission(Node):
                 record = dict(topic=topic, sim_time=self.get_clock().now().nanoseconds/1e9)
                 self.collisions.append(record)
                 self.get_logger().error('COLLISION: ' + topic)
+            self.emergency_stop()
+
+    def emergency_stop(self):
+        command = self.velocity_type()
+        if self.stamped_velocity:
+            command.header.stamp = self.get_clock().now().to_msg()
+        self.stop_pub.publish(command)
+
+    def pedestrian_ready_callback(self, msg):
+        self.pedestrian_last_ready = time.monotonic() if msg.data else None
+
+    def pedestrian_is_ready(self):
+        return (not self.pedestrian_enabled or
+                (self.pedestrian_last_ready is not None and
+                 time.monotonic()-self.pedestrian_last_ready < 5.))
 
     def sample_pose(self):
         if self.odom is None:
@@ -136,6 +164,9 @@ class InspectionMission(Node):
 
     def wait(self, predicate, deadline, message):
         while rclpy.ok():
+            if self.collisions and not getattr(self, 'cancelling', False):
+                self.emergency_stop()
+                raise RuntimeError('Contact detected; navigation aborted immediately')
             if predicate():
                 return
             if time.monotonic() >= deadline:
@@ -180,6 +211,8 @@ class InspectionMission(Node):
         self.event('waiting_for_navigation')
         self.wait(lambda: self.get_clock().now().nanoseconds > 0, deadline,
                   'No /clock: check Gazebo is running and not paused')
+        self.wait(self.pedestrian_is_ready, deadline,
+                  'Pedestrian not moving: check pedestrian_motion and set_pose bridge')
         for name in ('map_server', 'amcl', 'bt_navigator', 'waypoint_follower'):
             self.wait_active(name, deadline)
             self.event('node_active', node=name)
@@ -207,7 +240,7 @@ class InspectionMission(Node):
         try:
             topic_list = subprocess.run(['gz', 'topic', '-l'], capture_output=True,
                                         text=True, timeout=8., check=True).stdout.splitlines()
-            expected = {'/inspection_contacts/'+box['name'] for box in obstacles(self.layout)}
+            expected = set(contact_topics(self.layout, self.pedestrian_enabled))
             self.contact_publishers_registered = expected.intersection(
                 topic.strip() for topic in topic_list)
         except (OSError, subprocess.SubprocessError) as exc:
@@ -271,8 +304,11 @@ class InspectionMission(Node):
             pose[0]-self.home['x'], pose[1]-self.home['y'])
         home_yaw = None if pose is None else angle_error(pose[2], self.home['yaw'])
         dwell = self.dwell.results()
-        expected = len(obstacles(self.layout))
+        expected = len(contact_topics(self.layout, self.pedestrian_enabled))
         report = dict(
+            extra_protection=self.extra_protection,
+            pedestrian_enabled=self.pedestrian_enabled,
+            pedestrian_motion_ready=self.pedestrian_is_ready(),
             navigation_success=error is None and self.inspections_succeeded and self.return_succeeded,
             error=error, phase=self.phase,
             sequence=['Home', 'A', 'B', 'C', 'Home'],
@@ -286,7 +322,8 @@ class InspectionMission(Node):
             contact_topics_with_samples=sorted(self.contact_samples),
             contact_publishers_registered=sorted(self.contact_publishers_registered),
             contact_monitor_coverage=len(self.contact_publishers_registered)/expected,
-            acceptance_passed=(error is None and self.inspections_succeeded and self.return_succeeded
+            acceptance_passed=(error is None and self.pedestrian_is_ready()
+                               and self.inspections_succeeded and self.return_succeeded
                                and all(d['dwell_observed'] for d in dwell)
                                and home_distance is not None and home_distance <= .25
                                and home_yaw is not None and home_yaw <= .30
@@ -305,11 +342,14 @@ class InspectionMission(Node):
 
     def cancel_active(self):
         if self.active_goal is not None and rclpy.ok():
+            self.cancelling = True
             future = self.active_goal.cancel_goal_async()
             try:
                 self.future_result(future, time.monotonic()+3., 'Cancel timeout')
             except (TimeoutError, InterruptedError):
                 pass
+            finally:
+                self.cancelling = False
 
 
 def main(args=None):

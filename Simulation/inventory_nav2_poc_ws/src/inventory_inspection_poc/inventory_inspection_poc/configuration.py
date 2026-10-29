@@ -38,7 +38,7 @@ def detect_stamped_velocity(bridge_path):
     raise ValueError('No cmd_vel mapping in official TurtleBot3 bridge configuration')
 
 
-def make_nav2_parameters(defaults, overrides, layout, stamped):
+def make_nav2_parameters(defaults, overrides, layout, stamped, extra_protection=True):
     params = deep_merge(defaults, overrides)
     robot = layout.get('robot')
     if robot:
@@ -75,4 +75,14 @@ def make_nav2_parameters(defaults, overrides, layout, stamped):
             else:
                 simulation_time(value)
     simulation_time(params)
+    if not extra_protection:
+        # Keep the official launch's velocity relay, but remove every source of
+        # collision-monitor intervention (including invalid-source stopping).
+        monitor = params['collision_monitor']['ros__parameters']
+        monitor['enabled'] = False
+        for name in monitor['polygons']:
+            monitor[name]['enabled'] = False
+            monitor[name]['visualize'] = False
+        for name in monitor.get('observation_sources', ['scan']):
+            monitor.setdefault(name, {})['enabled'] = False
     return params

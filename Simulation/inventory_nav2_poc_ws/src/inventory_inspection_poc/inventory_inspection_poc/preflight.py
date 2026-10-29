@@ -22,6 +22,7 @@ def main():
         'ros_gz_sim': ['launch/gz_sim.launch.py'], 'ros_gz_bridge': [],
         'nav2_waypoint_follower': [], 'nav2_amcl': [], 'nav2_mppi_controller': [],
         'rviz2': [], 'robot_state_publisher': [], 'xacro': [],
+        'inventory_pedestrian_visual': [],
     }
     for package, files in required.items():
         directory = Path(get_package_share_directory(package))

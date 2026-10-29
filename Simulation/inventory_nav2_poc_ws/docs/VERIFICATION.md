@@ -1,5 +1,10 @@
 # Delivery verification
 
+2026-10-28 update: the optional pedestrian feature was built and exercised on the
+local Lyrical/Gazebo installation. See [pedestrian verification](PEDESTRIAN_VERIFICATION.md)
+for actual motion/LiDAR observations and remaining limits. The delivery-environment
+notes below describe the original delivery, before this on-machine check.
+
 This file records checks on the implementation, not a simulated mission result.
 
 ## Passed

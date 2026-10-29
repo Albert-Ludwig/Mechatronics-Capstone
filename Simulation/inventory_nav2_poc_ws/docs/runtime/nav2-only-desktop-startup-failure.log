@@ -1,0 +1,6 @@
+Oct 28 20:22:11 qhl-HP-Laptop-15-fd0xxx bash[19955]: [INFO] [launch.user]: Extra collision-monitor protection: False
+Oct 28 20:22:13 qhl-HP-Laptop-15-fd0xxx bash[19955]: [collision_monitor-18] [WARN] [1793233333.810414479] [collision_monitor]: Collision monitor is disabled at startup.
+Oct 28 20:22:28 qhl-HP-Laptop-15-fd0xxx bash[19955]: [bt_navigator-15] [ERROR] [1793233348.188458877] [bt_navigator_navigate_to_pose_rclcpp_node]: "global_costmap/clear_entirely_global_costmap" service server not available after waiting for 10.00s
+Oct 28 20:22:28 qhl-HP-Laptop-15-fd0xxx bash[19955]: [bt_navigator-15] [ERROR] [1793233348.208780446] [bt_navigator]: Setting internal error error_code:9001, error_msg:Exception when creating BT tree from ID: Service server global_costmap/clear_entirely_global_costmap not available
+Oct 28 20:22:28 qhl-HP-Laptop-15-fd0xxx bash[19955]: [bt_navigator-15] [ERROR] [1793233348.208898322] [bt_navigator]: Error loading BT: /opt/ros/lyrical/share/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml
+Oct 28 20:22:28 qhl-HP-Laptop-15-fd0xxx bash[19955]: [lifecycle_manager-21] [ERROR] [1793233348.210047258] [lifecycle_manager_nav2]: Failed to bring up all requested nodes. Aborting bringup.

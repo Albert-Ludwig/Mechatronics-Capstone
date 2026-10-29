@@ -15,7 +15,8 @@ import yaml
 
 from inventory_inspection_poc.configuration import (
     detect_stamped_velocity, load_layout, make_nav2_parameters)
-from inventory_inspection_poc.geometry import obstacles
+from inventory_inspection_poc.pedestrian import (
+    COMMAND_TOPIC, HEADING_TOPIC, STATE_TOPIC, VISUAL_TOPIC, contact_topics, world_with_pedestrian)
 from inventory_inspection_poc.robot_model import adapt_sdf, adapt_urdf
 
 
@@ -26,13 +27,20 @@ def start(context):
     bridge_path = sim_share/'configs/turtlebot3_waffle_bridge.yaml'
     layout = load_layout(share/'config/layout.yaml')
     home = layout['home']
+    pedestrian_enabled = IfCondition(LaunchConfiguration('pedestrian')).evaluate(context)
+    extra_protection = IfCondition(LaunchConfiguration('extra_protection')).evaluate(context)
     stamped = detect_stamped_velocity(bridge_path)
     defaults = yaml.safe_load((nav_share/'params/nav2_params.yaml').read_text())
     overrides = yaml.safe_load((share/'config/nav2_overrides.yaml').read_text())
-    params = make_nav2_parameters(defaults, overrides, layout, stamped)
+    params = make_nav2_parameters(defaults, overrides, layout, stamped, extra_protection)
 
     # This directory lives until shutdown; no race with Gazebo reading the world.
     temporary = tempfile.TemporaryDirectory(prefix='inventory_nav2_')
+    world_path = share/'worlds/warehouse.sdf'
+    if pedestrian_enabled:
+        moving_world = Path(temporary.name)/'warehouse_pedestrian.sdf'
+        moving_world.write_bytes(world_with_pedestrian(world_path.read_bytes(), layout))
+        world_path = moving_world
     robot_sdf = Path(temporary.name)/'inspection_tb3.sdf.xacro'
     robot_sdf.write_text(adapt_sdf(
         (sim_share/'urdf/gz_waffle.sdf.xacro').read_text(), layout['robot']))
@@ -42,15 +50,15 @@ def start(context):
     param_file.write_text(yaml.safe_dump(params, sort_keys=False))
     contacts_file = Path(temporary.name)/'contacts.yaml'
     contacts_file.write_text(yaml.safe_dump([
-        {'topic_name': '/inspection_contacts/'+box['name'],
+        {'topic_name': topic,
          'ros_type_name': 'ros_gz_interfaces/msg/Contacts',
          'gz_type_name': 'gz.msgs.Contacts', 'direction': 'GZ_TO_ROS'}
-        for box in obstacles(layout)]))
+        for topic in contact_topics(layout, pedestrian_enabled)]))
     cleanup = RegisterEventHandler(OnShutdown(on_shutdown=[
         OpaqueFunction(function=lambda context: temporary.cleanup())]))
 
     headless = LaunchConfiguration('headless').perform(context).lower() == 'true'
-    gz_args = '-r -v 2 ' + ('-s ' if headless else '') + str(share/'worlds/warehouse.sdf')
+    gz_args = '-r -v 2 ' + ('-s ' if headless else '') + str(world_path)
     gazebo = IncludeLaunchDescription(PythonLaunchDescriptionSource(
         str(Path(get_package_share_directory('ros_gz_sim'))/'launch/gz_sim.launch.py')),
         launch_arguments={'gz_args': gz_args}.items())
@@ -93,15 +101,38 @@ def start(context):
         condition=IfCondition(LaunchConfiguration('run_mission')),
         parameters=[{
             'use_sim_time': True, 'layout_file': str(share/'config/layout.yaml'),
+            'pedestrian_enabled': pedestrian_enabled,
+            'extra_protection': extra_protection,
+            'enable_stamped_cmd_vel': stamped,
             'results_dir': LaunchConfiguration('results_dir'),
             'startup_timeout': 240.0, 'mission_timeout': 900.0,
         }])
+    pedestrian_nodes = []
+    if pedestrian_enabled:
+        pedestrian_nodes = [
+            Node(package='ros_gz_bridge', executable='parameter_bridge',
+                 name='inspection_pedestrian_bridge', output='screen',
+                 arguments=[COMMAND_TOPIC+'@std_msgs/msg/Float64]gz.msgs.Double',
+                            HEADING_TOPIC+'@std_msgs/msg/Float64]gz.msgs.Double',
+                            STATE_TOPIC+'@sensor_msgs/msg/JointState[gz.msgs.Model',
+                            VISUAL_TOPIC+'@geometry_msgs/msg/PoseStamped[gz.msgs.Pose']),
+            Node(package='inventory_inspection_poc', executable='pedestrian_motion',
+                 output='screen', parameters=[{
+                     'use_sim_time': True, 'layout_file': str(share/'config/layout.yaml')}]),
+        ]
     # The server must inherit resource paths BEFORE it starts (not just the spawner).
-    resources = [AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', str(sim_share/'models')),
+    resources = [AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', str(share/'models')),
+                 AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', str(sim_share/'models')),
                  AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', str(sim_share.parent))]
+    if pedestrian_enabled:
+        visual_share = Path(get_package_share_directory('inventory_pedestrian_visual'))
+        resources.append(AppendEnvironmentVariable('GZ_SIM_SYSTEM_PLUGIN_PATH',
+                                                   str(visual_share.parent.parent/'lib')))
     return [cleanup, *resources, LogInfo(msg=f'Using resized TurtleBot3 (0.50 x 0.50 m); stamped cmd_vel={stamped}'),
             LogInfo(msg=f'Effective Nav2 parameters: {param_file}'),
-            gazebo, robot, state_publisher, contacts, navigation, rviz, mission]
+            LogInfo(msg=f'Pedestrian enabled: {pedestrian_enabled}'),
+            LogInfo(msg=f'Extra collision-monitor protection: {extra_protection}'),
+            gazebo, robot, state_publisher, contacts, *pedestrian_nodes, navigation, rviz, mission]
 
 
 def generate_launch_description():
@@ -110,6 +141,10 @@ def generate_launch_description():
                               description='Hide Gazebo GUI; sensors still use rendering'),
         DeclareLaunchArgument('use_rviz', default_value='true'),
         DeclareLaunchArgument('run_mission', default_value='true'),
+        DeclareLaunchArgument('extra_protection', default_value='true',
+                              description='Enable official Nav2 footprint approach protection; false disables the monitor'),
+        DeclareLaunchArgument('pedestrian', default_value='false',
+                              description='Enable bounded pedestrian patrol in the central aisle'),
         DeclareLaunchArgument('results_dir', default_value=str(Path.home()/'inventory_poc_results')),
         OpaqueFunction(function=start),
     ])

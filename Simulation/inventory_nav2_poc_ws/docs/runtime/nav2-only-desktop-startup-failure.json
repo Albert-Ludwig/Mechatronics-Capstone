@@ -1,0 +1,106 @@
+{
+  "mode": "mission",
+  "attached": true,
+  "extra_protection": false,
+  "collision_monitor_flags": {
+    "enabled": false,
+    "StopCircle.enabled": false,
+    "SlowCircle.enabled": false,
+    "FootprintApproach.enabled": false,
+    "scan.enabled": false
+  },
+  "velocity_passthrough": {
+    "paired_samples": 0,
+    "max_abs_velocity_error": null,
+    "moving_pairs": 0,
+    "cutoff_before_contact_seconds": null
+  },
+  "pedestrian_samples": 9422,
+  "robot_max_z": 0.010006862499679614,
+  "robot_max_tilt_radians": 3.8818937779909045e-05,
+  "min_center_distance": 1.4999999705360931,
+  "contact_samples": 0,
+  "ready_samples": 16888,
+  "nav2_command_samples": 0,
+  "nav2_max_forward": 0.0,
+  "robot_max_linear_speed": 1.670655028812125e-16,
+  "pedestrian_max_joint_speed": 0.6000000000011191,
+  "visual_pose_samples": 7935,
+  "visual_max_yaw_rate": 1.40000006363662,
+  "visual_yaw_range": [
+    0.0,
+    3.141592653589793
+  ],
+  "visual_turn_samples": 1241,
+  "nav2_turn_command_samples": 0,
+  "nav2_collision_monitor_actions": {},
+  "dynamic_costmap_observations": 76,
+  "pedestrian_x_range": [
+    -4,
+    2.787643258949821
+  ],
+  "mission": {
+    "extra_protection": false,
+    "pedestrian_enabled": true,
+    "pedestrian_motion_ready": true,
+    "navigation_success": false,
+    "error": "Interrupted by operator",
+    "phase": "startup",
+    "sequence": [
+      "Home",
+      "A",
+      "B",
+      "C",
+      "Home"
+    ],
+    "mission_sim_seconds": null,
+    "total_wall_seconds": 171.79081019399973,
+    "configured_dwell_seconds": 5.0,
+    "dwell_measurements": [
+      {
+        "name": "A",
+        "observed_stationary_seconds": 0.0,
+        "dwell_observed": false
+      },
+      {
+        "name": "B",
+        "observed_stationary_seconds": 0.0,
+        "dwell_observed": false
+      },
+      {
+        "name": "C",
+        "observed_stationary_seconds": 0.0,
+        "dwell_observed": false
+      }
+    ],
+    "inspections_succeeded": false,
+    "return_action_succeeded": false,
+    "final_home_distance_m": 7.194245199571014e-14,
+    "final_home_yaw_error_rad": 1.9108574736507727e-18,
+    "collision_events": [],
+    "contact_topics_with_samples": [],
+    "contact_publishers_registered": [],
+    "contact_monitor_coverage": 0.0,
+    "acceptance_passed": false,
+    "note": "Full dynamic acceptance additionally requires three fresh complete simulation runs. Contact sensors are event-only. Coverage uses Gazebo publisher discovery, not empty contact messages. Visually verify the three demonstration runs too.",
+    "events": [
+      {
+        "event": "waiting_for_navigation",
+        "sim_time": 0.0,
+        "wall_elapsed": 0.42023699199990006
+      },
+      {
+        "event": "node_active",
+        "sim_time": 0.108,
+        "wall_elapsed": 2.653268883999772,
+        "node": "map_server"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 0.114,
+        "wall_elapsed": 2.660149380999883,
+        "node": "amcl"
+      }
+    ]
+  }
+}

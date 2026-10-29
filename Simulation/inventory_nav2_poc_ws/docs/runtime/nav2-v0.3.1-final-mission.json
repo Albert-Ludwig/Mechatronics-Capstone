@@ -1,0 +1,160 @@
+{
+  "mode": "mission",
+  "pedestrian_samples": 10737,
+  "robot_max_z": 0.010007137811700581,
+  "robot_max_tilt_radians": 4.034121938630449e-05,
+  "min_center_distance": 0.9952917336960951,
+  "contact_samples": 0,
+  "ready_samples": 3846,
+  "pedestrian_x_range": [
+    -4.0000000000001075,
+    2.800000000000032
+  ],
+  "mission": {
+    "pedestrian_enabled": true,
+    "pedestrian_motion_ready": true,
+    "navigation_success": true,
+    "error": null,
+    "phase": "complete",
+    "sequence": [
+      "Home",
+      "A",
+      "B",
+      "C",
+      "Home"
+    ],
+    "mission_sim_seconds": 188.524,
+    "total_wall_seconds": 194.6674862860018,
+    "configured_dwell_seconds": 5.0,
+    "dwell_measurements": [
+      {
+        "name": "A",
+        "observed_stationary_seconds": 5.202,
+        "dwell_observed": true
+      },
+      {
+        "name": "B",
+        "observed_stationary_seconds": 5.202,
+        "dwell_observed": true
+      },
+      {
+        "name": "C",
+        "observed_stationary_seconds": 5.372,
+        "dwell_observed": true
+      }
+    ],
+    "inspections_succeeded": true,
+    "return_action_succeeded": true,
+    "final_home_distance_m": 0.07751892421231579,
+    "final_home_yaw_error_rad": 0.17508693761034438,
+    "collision_events": [],
+    "contact_topics_with_samples": [],
+    "contact_publishers_registered": [
+      "/inspection_contacts/inspection_pedestrian",
+      "/inspection_contacts/shelf_A",
+      "/inspection_contacts/shelf_B",
+      "/inspection_contacts/shelf_C",
+      "/inspection_contacts/wall_east",
+      "/inspection_contacts/wall_north",
+      "/inspection_contacts/wall_south",
+      "/inspection_contacts/wall_west"
+    ],
+    "contact_monitor_coverage": 1.0,
+    "acceptance_passed": true,
+    "note": "Full dynamic acceptance additionally requires three fresh complete simulation runs. Contact sensors are event-only. Coverage uses Gazebo publisher discovery, not empty contact messages. Visually verify the three demonstration runs too.",
+    "events": [
+      {
+        "event": "waiting_for_navigation",
+        "sim_time": 0.0,
+        "wall_elapsed": 0.06980284500059497
+      },
+      {
+        "event": "node_active",
+        "sim_time": 0.066,
+        "wall_elapsed": 1.8879959950008924,
+        "node": "map_server"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 0.074,
+        "wall_elapsed": 1.8947775170017849,
+        "node": "amcl"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 3.534,
+        "wall_elapsed": 5.3620726750014,
+        "node": "bt_navigator"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 3.842,
+        "wall_elapsed": 5.668719860001147,
+        "node": "waypoint_follower"
+      },
+      {
+        "event": "localization_ready",
+        "sim_time": 3.842,
+        "wall_elapsed": 7.816839740000432,
+        "x": -5.499999999999928,
+        "y": -2.747830578397639e-25,
+        "yaw": 4.315285450403388e-19
+      },
+      {
+        "event": "mission_started",
+        "sim_time": 3.842,
+        "wall_elapsed": 7.817700183000852,
+        "sequence": [
+          "Home",
+          "A",
+          "B",
+          "C",
+          "Home"
+        ]
+      },
+      {
+        "event": "navigating_to",
+        "sim_time": 5.996,
+        "wall_elapsed": 7.822171508001702,
+        "waypoint": "A",
+        "index": 0
+      },
+      {
+        "event": "navigating_to",
+        "sim_time": 33.496,
+        "wall_elapsed": 35.339302344000316,
+        "waypoint": "B",
+        "index": 1
+      },
+      {
+        "event": "navigating_to",
+        "sim_time": 55.212,
+        "wall_elapsed": 57.18937160900168,
+        "waypoint": "C",
+        "index": 2
+      },
+      {
+        "event": "action_succeeded",
+        "sim_time": 117.418,
+        "wall_elapsed": 119.57758549900063,
+        "action": "A -> B -> C"
+      },
+      {
+        "event": "returning_home",
+        "sim_time": 117.418,
+        "wall_elapsed": 119.57858877000035
+      },
+      {
+        "event": "action_succeeded",
+        "sim_time": 191.862,
+        "wall_elapsed": 194.1644939380003,
+        "action": "Return Home"
+      },
+      {
+        "event": "mission_complete",
+        "sim_time": 192.366,
+        "wall_elapsed": 194.66661748000115
+      }
+    ]
+  }
+}

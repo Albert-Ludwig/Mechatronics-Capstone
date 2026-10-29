@@ -1,7 +1,16 @@
-build/
-install/
-log/
+**/build/
+**/install/
+**/log/
 __pycache__/
 *.pyc
 .pytest_cache/
 .vscode/
+
+# Local assistant metadata, credentials and nested project checkout
+/.agents/
+/.codex/
+/.aws/
+/Mechatronics-Capstone/
+
+# Historical configuration is kept in Git commits instead
+*.before_filters_fix

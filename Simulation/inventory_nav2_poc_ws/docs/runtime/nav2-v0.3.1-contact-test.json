@@ -1,0 +1,14 @@
+{
+  "mode": "contact",
+  "pedestrian_samples": 2132,
+  "robot_max_z": 0.010007137987450614,
+  "robot_max_tilt_radians": 4.034380901138662e-05,
+  "min_center_distance": 0.3249645304638818,
+  "contact_samples": 519,
+  "ready_samples": 766,
+  "pedestrian_x_range": [
+    -4,
+    2.800000000000119
+  ],
+  "mission": null
+}

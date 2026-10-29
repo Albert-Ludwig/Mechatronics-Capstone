@@ -75,6 +75,14 @@ def adapt_sdf(text, spec):
         joint.text = ' '.join(fields)
     drive = required(model, "plugin[@name='gz::sim::systems::DiffDrive']")
     required(drive, 'wheel_separation').text = str(track)
+    for key, value in (
+        ('max_linear_velocity', float(spec['max_linear_velocity'])),
+        ('min_linear_velocity', -.3),
+        ('max_linear_acceleration', float(spec['max_linear_acceleration'])),
+        ('min_linear_acceleration', -float(spec['max_linear_deceleration'])),
+        ('max_angular_velocity', 1.2), ('min_angular_velocity', -1.2),
+        ('max_angular_acceleration', 2.), ('min_angular_acceleration', -2.)):
+        set_text(drive, key, value)
     ET.indent(root, space='  ')
     return ET.tostring(root, encoding='unicode')
 

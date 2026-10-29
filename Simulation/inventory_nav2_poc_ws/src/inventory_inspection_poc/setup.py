@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 NAME = 'inventory_inspection_poc'
 setup(
     name=NAME,
-    version='0.1.0',
+    version='0.6.1',
     packages=find_packages(exclude=['tests']),
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + NAME]),
@@ -13,6 +13,7 @@ setup(
         ('share/' + NAME + '/config', glob('config/*.yaml')),
         ('share/' + NAME + '/maps', glob('maps/*')),
         ('share/' + NAME + '/worlds', glob('worlds/*.sdf')),
+        ('share/' + NAME + '/models/hunav_worker', glob('models/hunav_worker/*')),
     ],
     install_requires=['setuptools', 'PyYAML'],
     zip_safe=True,
@@ -23,5 +24,6 @@ setup(
     entry_points={'console_scripts': [
         'inspection_mission = inventory_inspection_poc.mission:main',
         'check_environment = inventory_inspection_poc.preflight:main',
+        'pedestrian_motion = inventory_inspection_poc.pedestrian_motion:main',
     ]},
 )

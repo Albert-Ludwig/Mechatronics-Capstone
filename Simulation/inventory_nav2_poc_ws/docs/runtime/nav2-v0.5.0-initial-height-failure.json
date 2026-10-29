@@ -1,0 +1,149 @@
+{
+  "mode": "mission",
+  "attached": false,
+  "pedestrian_samples": 1518,
+  "robot_max_z": 0.010007138074828744,
+  "robot_max_tilt_radians": 4.034407319333683e-05,
+  "min_center_distance": 0.5304613086743772,
+  "contact_samples": 2,
+  "ready_samples": 543,
+  "nav2_command_samples": 320,
+  "nav2_max_forward": 0.9945231676101685,
+  "robot_max_linear_speed": 0.985399975770479,
+  "pedestrian_max_joint_speed": 0.40627553991866305,
+  "nav2_turn_command_samples": 275,
+  "nav2_collision_monitor_actions": {
+    "2:SlowCircle": 2,
+    "0:": 2
+  },
+  "dynamic_costmap_observations": 0,
+  "pedestrian_x_range": [
+    -4,
+    2.79997620620684
+  ],
+  "mission": {
+    "pedestrian_enabled": true,
+    "pedestrian_motion_ready": true,
+    "navigation_success": false,
+    "error": "Contact detected; navigation aborted immediately",
+    "phase": "inspections",
+    "sequence": [
+      "Home",
+      "A",
+      "B",
+      "C",
+      "Home"
+    ],
+    "mission_sim_seconds": 23.759999999999998,
+    "total_wall_seconds": 29.83509911799956,
+    "configured_dwell_seconds": 5.0,
+    "dwell_measurements": [
+      {
+        "name": "A",
+        "observed_stationary_seconds": 5.202,
+        "dwell_observed": true
+      },
+      {
+        "name": "B",
+        "observed_stationary_seconds": 0.0,
+        "dwell_observed": false
+      },
+      {
+        "name": "C",
+        "observed_stationary_seconds": 0.0,
+        "dwell_observed": false
+      }
+    ],
+    "inspections_succeeded": false,
+    "return_action_succeeded": false,
+    "final_home_distance_m": 4.344004711004235,
+    "final_home_yaw_error_rad": 1.6026433212816393,
+    "collision_events": [
+      {
+        "topic": "/inspection_contacts/inspection_pedestrian",
+        "sim_time": 27.152
+      }
+    ],
+    "contact_topics_with_samples": [
+      "/inspection_contacts/inspection_pedestrian"
+    ],
+    "contact_publishers_registered": [
+      "/inspection_contacts/inspection_pedestrian",
+      "/inspection_contacts/shelf_A",
+      "/inspection_contacts/shelf_B",
+      "/inspection_contacts/shelf_C",
+      "/inspection_contacts/wall_east",
+      "/inspection_contacts/wall_north",
+      "/inspection_contacts/wall_south",
+      "/inspection_contacts/wall_west"
+    ],
+    "contact_monitor_coverage": 1.0,
+    "acceptance_passed": false,
+    "note": "Full dynamic acceptance additionally requires three fresh complete simulation runs. Contact sensors are event-only. Coverage uses Gazebo publisher discovery, not empty contact messages. Visually verify the three demonstration runs too.",
+    "events": [
+      {
+        "event": "waiting_for_navigation",
+        "sim_time": 0.0,
+        "wall_elapsed": 0.06775288299832027
+      },
+      {
+        "event": "node_active",
+        "sim_time": 0.06,
+        "wall_elapsed": 2.31358208599886,
+        "node": "map_server"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 0.062,
+        "wall_elapsed": 2.316995160999795,
+        "node": "amcl"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 3.086,
+        "wall_elapsed": 5.341922638999677,
+        "node": "bt_navigator"
+      },
+      {
+        "event": "node_active",
+        "sim_time": 3.394,
+        "wall_elapsed": 5.648018886999125,
+        "node": "waypoint_follower"
+      },
+      {
+        "event": "localization_ready",
+        "sim_time": 3.394,
+        "wall_elapsed": 7.748480328998994,
+        "x": -5.499999999999928,
+        "y": -2.747830439730683e-25,
+        "yaw": 4.355270327238436e-19
+      },
+      {
+        "event": "mission_started",
+        "sim_time": 3.394,
+        "wall_elapsed": 7.7490150869998615,
+        "sequence": [
+          "Home",
+          "A",
+          "B",
+          "C",
+          "Home"
+        ]
+      },
+      {
+        "event": "navigating_to",
+        "sim_time": 5.498,
+        "wall_elapsed": 7.751935030999448,
+        "waypoint": "A",
+        "index": 0
+      },
+      {
+        "event": "navigating_to",
+        "sim_time": 22.796,
+        "wall_elapsed": 25.06515558999854,
+        "waypoint": "B",
+        "index": 1
+      }
+    ]
+  }
+}

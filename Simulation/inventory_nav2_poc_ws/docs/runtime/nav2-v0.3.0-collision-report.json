@@ -1,0 +1,154 @@
+{
+  "pedestrian_enabled": true,
+  "pedestrian_motion_ready": true,
+  "navigation_success": false,
+  "error": "Navigation completed but warehouse contact sensors reported a collision",
+  "phase": "return_home",
+  "sequence": [
+    "Home",
+    "A",
+    "B",
+    "C",
+    "Home"
+  ],
+  "mission_sim_seconds": 160.92800000000003,
+  "total_wall_seconds": 167.94643147399984,
+  "configured_dwell_seconds": 5.0,
+  "dwell_measurements": [
+    {
+      "name": "A",
+      "observed_stationary_seconds": 5.406,
+      "dwell_observed": true
+    },
+    {
+      "name": "B",
+      "observed_stationary_seconds": 5.372,
+      "dwell_observed": true
+    },
+    {
+      "name": "C",
+      "observed_stationary_seconds": 5.406,
+      "dwell_observed": true
+    }
+  ],
+  "inspections_succeeded": true,
+  "return_action_succeeded": true,
+  "final_home_distance_m": 0.11570599615304604,
+  "final_home_yaw_error_rad": 0.1388586230993461,
+  "collision_events": [
+    {
+      "topic": "/inspection_contacts/inspection_pedestrian",
+      "sim_time": 131.586
+    },
+    {
+      "topic": "/inspection_contacts/shelf_A",
+      "sim_time": 141.59
+    }
+  ],
+  "contact_topics_with_samples": [
+    "/inspection_contacts/inspection_pedestrian",
+    "/inspection_contacts/shelf_A"
+  ],
+  "contact_publishers_registered": [
+    "/inspection_contacts/inspection_pedestrian",
+    "/inspection_contacts/shelf_A",
+    "/inspection_contacts/shelf_B",
+    "/inspection_contacts/shelf_C",
+    "/inspection_contacts/wall_east",
+    "/inspection_contacts/wall_north",
+    "/inspection_contacts/wall_south",
+    "/inspection_contacts/wall_west"
+  ],
+  "contact_monitor_coverage": 1.0,
+  "acceptance_passed": false,
+  "note": "Full dynamic acceptance additionally requires three fresh complete simulation runs. Contact sensors are event-only. Coverage uses Gazebo publisher discovery, not empty contact messages. Visually verify the three demonstration runs too.",
+  "events": [
+    {
+      "event": "waiting_for_navigation",
+      "sim_time": 0.0,
+      "wall_elapsed": 0.058808853999835264
+    },
+    {
+      "event": "node_active",
+      "sim_time": 0.116,
+      "wall_elapsed": 2.2855928110002424,
+      "node": "map_server"
+    },
+    {
+      "event": "node_active",
+      "sim_time": 0.42,
+      "wall_elapsed": 2.591600224999638,
+      "node": "amcl"
+    },
+    {
+      "event": "node_active",
+      "sim_time": 4.352,
+      "wall_elapsed": 6.522061532999942,
+      "node": "bt_navigator"
+    },
+    {
+      "event": "node_active",
+      "sim_time": 4.658,
+      "wall_elapsed": 6.827664106999691,
+      "node": "waypoint_follower"
+    },
+    {
+      "event": "localization_ready",
+      "sim_time": 4.658,
+      "wall_elapsed": 8.92304754899942,
+      "x": -5.499999999999928,
+      "y": -2.8706603505343514e-25,
+      "yaw": 1.35771254395346e-19
+    },
+    {
+      "event": "mission_started",
+      "sim_time": 4.658,
+      "wall_elapsed": 8.923590812999464,
+      "sequence": [
+        "Home",
+        "A",
+        "B",
+        "C",
+        "Home"
+      ]
+    },
+    {
+      "event": "navigating_to",
+      "sim_time": 6.752,
+      "wall_elapsed": 8.92593501400006,
+      "waypoint": "A",
+      "index": 0
+    },
+    {
+      "event": "navigating_to",
+      "sim_time": 28.4,
+      "wall_elapsed": 30.58077803499964,
+      "waypoint": "B",
+      "index": 1
+    },
+    {
+      "event": "navigating_to",
+      "sim_time": 47.702,
+      "wall_elapsed": 49.883541749999495,
+      "waypoint": "C",
+      "index": 2
+    },
+    {
+      "event": "action_succeeded",
+      "sim_time": 91.606,
+      "wall_elapsed": 93.88730586600013,
+      "action": "A -> B -> C"
+    },
+    {
+      "event": "returning_home",
+      "sim_time": 91.606,
+      "wall_elapsed": 93.88801343599971
+    },
+    {
+      "event": "action_succeeded",
+      "sim_time": 165.084,
+      "wall_elapsed": 167.44458657499945,
+      "action": "Return Home"
+    }
+  ]
+}

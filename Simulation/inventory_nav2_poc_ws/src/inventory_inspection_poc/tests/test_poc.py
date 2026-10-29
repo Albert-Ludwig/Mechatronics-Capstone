@@ -95,6 +95,47 @@ class WarehouseTests(unittest.TestCase):
 
 
 class ParameterTests(unittest.TestCase):
+    def test_default_uses_nav2_approach_protection_without_fixed_circles(self):
+        overrides = yaml.safe_load((ROOT/'config/nav2_overrides.yaml').read_text())
+        layout = load_layout(ROOT/'config/layout.yaml')
+        result = make_nav2_parameters({'amcl': {'ros__parameters': {}}}, overrides, layout, True)
+        monitor = result['collision_monitor']['ros__parameters']
+        self.assertTrue(monitor['enabled'])
+        self.assertTrue(monitor['scan']['enabled'])
+        self.assertTrue(monitor['FootprintApproach']['enabled'])
+        self.assertEqual(monitor['FootprintApproach']['time_before_collision'], 2.0)
+        for name in ('StopCircle', 'SlowCircle'):
+            self.assertFalse(monitor[name]['enabled'])
+            self.assertFalse(monitor[name]['visualize'])
+
+    def test_nav2_only_disables_all_monitor_inputs_without_changing_navigation(self):
+        overrides = yaml.safe_load((ROOT/'config/nav2_overrides.yaml').read_text())
+        defaults = {'amcl': {'ros__parameters': {}}, 'collision_monitor': {
+            'ros__parameters': {'enabled': True, 'observation_sources': ['scan', 'depth'],
+                               'depth': {'type': 'pointcloud', 'enabled': True}}}}
+        layout = load_layout(ROOT/'config/layout.yaml')
+        protected = make_nav2_parameters(defaults, overrides, layout, True)
+        unprotected = make_nav2_parameters(defaults, overrides, layout, True, False)
+        monitor = unprotected.pop('collision_monitor')['ros__parameters']
+        self.assertFalse(monitor['enabled'])
+        for name in monitor['polygons'] + monitor['observation_sources']:
+            self.assertFalse(monitor[name]['enabled'])
+        self.assertTrue(protected.pop('collision_monitor')['ros__parameters']['enabled'])
+        self.assertEqual(unprotected, protected)
+        self.assertTrue(defaults['collision_monitor']['ros__parameters']['depth']['enabled'])
+
+    def test_robot_keeps_one_metre_limit_when_pedestrian_slows(self):
+        layout = load_layout(ROOT/'config/layout.yaml')
+        params = yaml.safe_load((ROOT/'config/nav2_overrides.yaml').read_text())
+        limit = layout['robot']['max_linear_velocity']
+        self.assertEqual(limit, 1.)
+        self.assertEqual(layout['pedestrian']['speed'], .6)
+        self.assertEqual(params['controller_server']['ros__parameters']['FollowPath']['vx_max'], limit)
+        smoother = params['velocity_smoother']['ros__parameters']
+        self.assertEqual(smoother['max_velocity'][0], limit)
+        self.assertLessEqual(smoother['max_accel'][0], layout['robot']['max_linear_acceleration'])
+        self.assertLessEqual(abs(smoother['max_decel'][0]), layout['robot']['max_linear_deceleration'])
+
     def test_square_footprint_and_global_circle_cover_the_robot(self):
         overrides = yaml.safe_load((ROOT/'config/nav2_overrides.yaml').read_text())
         layout = load_layout(ROOT/'config/layout.yaml')
@@ -229,7 +270,8 @@ def load_mission_with_fake_ros():
                  'ros_gz_interfaces', 'sensor_msgs', 'std_msgs'):
         fake_module(name)
     fake_module('action_msgs.msg', GoalStatus=NS(STATUS_SUCCEEDED=4))
-    fake_module('geometry_msgs.msg', PoseStamped=object, PoseWithCovarianceStamped=object)
+    fake_module('geometry_msgs.msg', PoseStamped=object, PoseWithCovarianceStamped=object,
+                Twist=object, TwistStamped=object)
     fake_module('lifecycle_msgs.srv', GetState=object)
     fake_module('nav2_msgs.action', FollowWaypoints=NS(Goal=NS), NavigateToPose=NS(Goal=NS))
     fake_module('nav_msgs.msg', Odometry=object)
@@ -250,6 +292,29 @@ def load_mission_with_fake_ros():
 
 
 class MissionOrchestrationTests(unittest.TestCase):
+    def test_contact_aborts_wait_instead_of_continuing_to_later_goals(self):
+        _, node = self.mission()
+        node.collisions = [{'topic': '/inspection_contacts/inspection_pedestrian'}]
+        node.emergency_stop = Mock()
+        with self.assertRaisesRegex(RuntimeError, 'Contact detected'):
+            node.wait(lambda: True, 100., 'irrelevant')
+        node.emergency_stop.assert_called_once()
+
+    def test_enabled_pedestrian_requires_recent_successful_motion_heartbeat(self):
+        mod, node = self.mission()
+        node.pedestrian_enabled = True
+        node.pedestrian_last_ready = None
+        with patch.object(mod.time, 'monotonic', return_value=10.):
+            self.assertFalse(node.pedestrian_is_ready())
+            node.pedestrian_ready_callback(NS(data=True))
+            self.assertTrue(node.pedestrian_is_ready())
+        with patch.object(mod.time, 'monotonic', return_value=16.):
+            self.assertFalse(node.pedestrian_is_ready())
+        node.pedestrian_ready_callback(NS(data=False))
+        self.assertIsNone(node.pedestrian_last_ready)
+        node.pedestrian_enabled = False
+        self.assertTrue(node.pedestrian_is_ready())
+
     def mission(self):
         mod = load_mission_with_fake_ros()
         node = mod.InspectionMission.__new__(mod.InspectionMission)

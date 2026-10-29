@@ -1,0 +1,6 @@
+[INFO] [launch.user]: Extra collision-monitor protection: False
+[collision_monitor-18] [WARN] [1793232898.509117675] [collision_monitor]: Collision monitor is disabled at startup.
+[bt_navigator-15] [ERROR] [1793232913.208879279] [bt_navigator_navigate_to_pose_rclcpp_node]: "follow_path" action server not available after waiting for 10.00s
+[bt_navigator-15] [ERROR] [1793232913.229848778] [bt_navigator]: Setting internal error error_code:9001, error_msg:Exception when creating BT tree from ID: Action server follow_path not available
+[bt_navigator-15] [ERROR] [1793232913.229913088] [bt_navigator]: Error loading BT: /opt/ros/lyrical/share/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml
+[lifecycle_manager-21] [ERROR] [1793232913.230653458] [lifecycle_manager_nav2]: Failed to bring up all requested nodes. Aborting bringup.

@@ -1,0 +1,14 @@
+[collision_monitor-18] [INFO] [1793227542.938364422] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227543.718084588] [collision_monitor]: Robot to stop due to StopCircle polygon
+[collision_monitor-18] [INFO] [1793227546.338223546] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227547.118227456] [collision_monitor]: Robot to continue normal operation
+[collision_monitor-18] [INFO] [1793227600.650475953] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227601.130249547] [collision_monitor]: Robot to continue normal operation
+[collision_monitor-18] [INFO] [1793227601.330130313] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227601.530150613] [collision_monitor]: Robot to continue normal operation
+[collision_monitor-18] [INFO] [1793227601.940118066] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227616.956004431] [collision_monitor]: Robot to continue normal operation
+[collision_monitor-18] [INFO] [1793227617.156869172] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227617.355801260] [collision_monitor]: Robot to continue normal operation
+[collision_monitor-18] [INFO] [1793227617.766017471] [collision_monitor]: Robot to slowdown for 50.000000 percents due to SlowCircle polygon
+[collision_monitor-18] [INFO] [1793227617.805942325] [collision_monitor]: Robot to continue normal operation

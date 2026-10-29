@@ -13,7 +13,7 @@ fi
 task_workspace="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "/opt/ros/$task_distro/setup.bash"
 cd "$task_workspace"
-colcon build --symlink-install --packages-select inventory_inspection_poc
+colcon build --symlink-install --packages-up-to inventory_inspection_poc
 source install/local_setup.bash
 ros2 run inventory_inspection_poc check_environment
 exec ros2 launch inventory_inspection_poc inspection.launch.py "$@"

@@ -12,6 +12,21 @@ robot:
   mass: 1.0
   wheel_separation: 0.47
   footprint_padding: 0.025
+  max_linear_velocity: 1.0
+  max_linear_acceleration: 1.0
+  max_linear_deceleration: 2.0
+pedestrian:
+  # From Home's viewpoint: vertically up the central opening, then back.
+  x_min: -4.0
+  x_max: 2.8
+  y: 0.0
+  speed: 0.6
+  ramp_seconds: 2.0
+  turn_seconds: 3.2
+  turn_rate: 1.4
+  animation_seconds_per_metre: 4.15
+  radius: 0.28
+  clearance: 0.20
 shelves:
   - {name: shelf_A, x: -1.5, y: 3.0, size_x: 5.0, size_y: 1.0}
   - {name: shelf_B, x: -1.5, y: -3.0, size_x: 5.0, size_y: 1.0}
