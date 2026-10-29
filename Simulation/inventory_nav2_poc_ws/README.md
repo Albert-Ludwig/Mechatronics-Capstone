@@ -177,7 +177,7 @@ From a shell with these dependencies installed:
 ```bash
 cd /home/qhl/inventory_nav2_poc_ws
 source /opt/ros/lyrical/setup.bash
-colcon build --symlink-install --packages-up-to inventory_inspection_poc
+colcon build --base-paths src --symlink-install --packages-up-to inventory_inspection_poc
 source install/local_setup.bash
 ros2 run inventory_inspection_poc check_environment
 ros2 launch inventory_inspection_poc inspection.launch.py \
